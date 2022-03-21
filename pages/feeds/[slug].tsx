@@ -2,6 +2,7 @@ import { FEEDS, getFeed } from "../../lib/rss";
 import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
+import styles from "../../styles/Feed.module.scss";
 
 interface IFeedProps {
   feed: IFeed;
@@ -10,31 +11,31 @@ interface IFeedProps {
 
 let feedCategory: string;
 const Feed = ({ feed, feedItems }: IFeedProps) => {
-  const [category, setCategory] = useState<string>("sport");
   const router = useRouter();
 
-  useEffect(() => {
-    feedCategory = category;
-  }, [category]);
-
   return (
-    <div>
-      <button type="button" onClick={() => router.push("/")}>
-        Gå tilbake
-      </button>
-      <h1>
-        {feed.title}, kategori {category}
-      </h1>
-      <div>
-        {feedItems.map((item: any) => (
-          <a href={item.link} key={item.link} target="_blank">
-            <h1>{item.title}</h1>
-            <p>{item.content.slice(0, 300)}...</p>
-            <h3>{format(new Date(item.isoDate), "PPP")}</h3>
-          </a>
-        ))}
+    <section className={styles.feedPage}>
+      <div className={styles.feedWrap}>
+        <button type="button" onClick={() => router.back()}>
+          Gå tilbake
+        </button>
+        <h1>{feed.title}, sport</h1>
+        <div className={styles.feedPageCards}>
+          {feedItems.map((item: any) => (
+            <a
+              className={styles.feedPageCard}
+              href={item.link}
+              key={item.link}
+              target="_blank"
+            >
+              <h1>{item.title}</h1>
+              <p>{item.content.slice(0, 300)}...</p>
+              <h3>{format(new Date(item.isoDate), "PPP")}</h3>
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
